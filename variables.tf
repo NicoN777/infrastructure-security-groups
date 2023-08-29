@@ -10,7 +10,7 @@ data "terraform_remote_state" "vpc" {
 }
 
 data "aws_vpc" "vpc" {
-  id = data.terraform_remote_state.vpc.outputs.id
+  id = data.terraform_remote_state.vpc.outputs.main.id
 }
 
 
