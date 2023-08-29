@@ -1,11 +1,18 @@
-variable "vpc_id" {
-  description = "The VPC's ID"
-  type        = string
+data "terraform_remote_state" "vpc" {
+  backend = "remote"
+
+  config = {
+    organization = "just-boxey-things"
+    workspaces = {
+      name = "aws-network"
+    }
+  }
 }
 
 data "aws_vpc" "vpc" {
-  id = var.vpc_id
+  id = data.terraform_remote_state.vpc.outputs.id
 }
+
 
 
 variable "ssh_sg_name" {
@@ -53,8 +60,4 @@ data "aws_security_groups" "web_server_security_groups" {
     values = [ "ssh-sg", "web-servers-sg*" ]
   }
   
-}
-
-output "security_gs" {
-  value = data.aws_security_groups.web_server_security_groups
 }
